@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Text,
     ScrollView,
+    ActivityIndicator,
     TouchableHighlight,
     Image,
     View
@@ -26,8 +27,8 @@ class Girl extends Component {
                     <View style={styles.cardContent}>
                         <Text style={styles.girlName}>
                             {girl.name}</Text>
-                          <Text style={styles.girlInfo}>
-                            B:{girl.bust}   W:{girl.waist}   H:{girl.hip}
+                        <Text style={styles.girlInfo}>
+                            B:{girl.bust} W:{girl.waist} H:{girl.hip}
                         </Text>
                     </View>
 
@@ -41,16 +42,17 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            girls: []
+            girls: [],
+            isLoading: true
         };
         this.navigate = this.navigate.bind(this);
         this.onGirlClicked = this.onGirlClicked.bind(this);
     }
 
-    componentDidMount() {
-        fetch('https://javrest-hoangph92.rhcloud.com/api/actress').then((response) => response.json()).then((responseData) => {
-            this.setState({girls: responseData.result, loaded: true});
-        }).done();
+    async componentDidMount() {
+        var responseData = await fetch('https://javrest-hoangph92.rhcloud.com/api/actress')
+                                .then((response) => response.json());
+        this.setState({girls: responseData.result, isLoading: false});
     }
 
     onGirlClicked(girl) {
@@ -70,6 +72,17 @@ class HomePage extends Component {
 
     render() {
         var girls = this.state.girls;
+        var loadingElement = <View style={{
+            alignItems: 'center',
+            marginTop: 10
+        }}>
+            <Text style={{fontSize:18, fontWeight: '600'}}>Loading. Please wait...</Text>
+            <ActivityIndicator size="large" animating={this.state.isLoading}></ActivityIndicator>
+        </View>;
+
+        if (!this.state.isLoading) {
+            loadingElement = <View></View>;
+        }
 
         return (
             <View style={styles.container}>
@@ -77,7 +90,7 @@ class HomePage extends Component {
                     title: "JAV World"
                 }}/>
                 <TextInput style={styles.textbox} placeholder="Search!"/>
-
+                {loadingElement}
                 <ScrollView>
                     <View style={styles.girlGrid}>
                         {girls.map(girl => <Girl onClicked={this.onGirlClicked} key={girl.id} girl={girl}></Girl>)}
@@ -122,13 +135,13 @@ const styles = StyleSheet.create({
 
     },
     girlName: {
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 11
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 11
     },
     girlInfo: {
-      textAlign: 'center',
-      fontSize: 9
+        textAlign: 'center',
+        fontSize: 9
     },
     container: {
         flex: 1,

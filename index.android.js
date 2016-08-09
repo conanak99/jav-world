@@ -4,50 +4,34 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+ import React, {Component} from 'react';
+ import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native';
+ import HomePage from './screens/home-page';
+ import MoviePage from './screens/movie-page';
 
-class FirstProject extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js.
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+ class FirstProject extends Component {
+     render() {
+         return (<Navigator style={{
+             flex: 1
+         }} initialRoute={{
+             name: 'Main'
+         }} renderScene={this.renderScene}/>);
+     }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+     renderScene(route, navigator) {
+       console.log(route.name);
+         switch (route.name) {
 
+             case 'Main':
+                 return <HomePage navigator={navigator} {...route.passProps} ></HomePage>
+                 break;
+             case 'Movie':
+                 return <MoviePage navigator={navigator} girl={route.girl} ></MoviePage>
+                 break;
+             default:
+
+         }
+     }
+ }
+ 
 AppRegistry.registerComponent('FirstProject', () => FirstProject);
