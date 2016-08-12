@@ -27,7 +27,7 @@ class MovieItem extends Component {
 
     return <View style={{paddingVertical: 10, paddingHorizontal: 15, flexDirection:'row'}}>
         <Image source={{
-            uri: mv.imageUrl.replace('http', 'https')
+            uri: mv.imageUrl
         }} style={{height: 200, width:120}}></Image>
       <View style={{paddingLeft:20}}>
         <Text style={{width:200, fontSize:14, fontWeight:'bold', marginBottom:5}}>{mv.name}</Text>
@@ -81,7 +81,7 @@ class MoviePage extends Component {
 
         <View style={{flexDirection:'row', padding: 15}}>
           <Image source={{
-              uri: girl.imageUrl.replace('http', 'https')
+              uri: girl.imageUrl
           }} style={{width: 120, height:120, borderRadius: 60}}></Image>
         <View style={{marginLeft: 20}}>
             <Text style={{fontSize:16, fontWeight:'bold', marginBottom:5}}>{girl.name}</Text>
@@ -101,7 +101,7 @@ class MoviePage extends Component {
           </View>
 
           <ActivityIndicator size="large" animating={this.state.isLoading}></ActivityIndicator>
-            <ListView style={{height:450, marginTop: -30}}
+            <ListView style={{height:420, marginTop: -30}}
 
     dataSource={this.state.movies}
     renderRow={(rowData) => <MovieItem movie={rowData}/>}

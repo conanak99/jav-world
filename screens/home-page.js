@@ -12,15 +12,15 @@ import {
 
 import GridView from 'react-native-grid-view';
 import NavigationBar from 'react-native-navbar';
+import Button from 'react-native-button';
 
 class Girl extends Component {
     render() {
         var girl = this.props.girl;
-        return <TouchableHighlight onPress={this.props.onClicked.bind(null, girl)}>
-            <View style={styles.girlCell}>
+        return <TouchableHighlight style={styles.girlCell} onPress={this.props.onClicked.bind(null, girl)}>
                 <View style={styles.card}>
                     <Image source={{
-                        uri: girl.imageUrl.replace('http', 'https')
+                        uri: girl.imageUrl
                     }} style={{
                         flex: 1
                     }}/>
@@ -33,7 +33,6 @@ class Girl extends Component {
                     </View>
 
                 </View>
-            </View>
         </TouchableHighlight>
     }
 }
@@ -45,8 +44,9 @@ class HomePage extends Component {
             girls: [],
             isLoading: true
         };
-        this.navigate = this.navigate.bind(this);
+
         this.onGirlClicked = this.onGirlClicked.bind(this);
+        this.onSearch = this.onSearch.bind(this);
     }
 
     async componentDidMount() {
@@ -58,25 +58,23 @@ class HomePage extends Component {
     onGirlClicked(girl) {
         console.log(girl);
         this.props.navigator.push({name: 'Movie', girl: girl});
-
     }
 
-    navigate() {
-        this.props.navigator.push({
-            name: 'Movie',
-            girl: {
-                name: 'Hana'
-            }
-        });
+    async onSearch() {
+      var search = this.state.search;
+      this.setState({girls: [], isLoading: true});
+
+      var responseData = await fetch('https://javrest-hoangph92.rhcloud.com/api/actress?name=' + search)
+                              .then((response) => response.json());
+      this.setState({girls: responseData.result, isLoading: false});
     }
 
     render() {
         var girls = this.state.girls;
         var loadingElement = <View style={{
-            alignItems: 'center',
-            marginTop: 10
+            alignItems: 'center'
         }}>
-            <Text style={{fontSize:18, fontWeight: '600'}}>Loading. Please wait...</Text>
+            <Text style={{fontSize:16, fontWeight: '600'}}>Loading. Please wait...</Text>
             <ActivityIndicator size="large" animating={this.state.isLoading}></ActivityIndicator>
         </View>;
 
@@ -89,7 +87,19 @@ class HomePage extends Component {
                 <NavigationBar title={{
                     title: "JAV World"
                 }}/>
-                <TextInput style={styles.textbox} placeholder="Search!"/>
+              <View style={{alignSelf:'stretch', flexDirection:'row', padding: 15}}>
+                <TextInput style={styles.textbox}
+                  onChangeText={(text) => this.setState({search: text})}
+                  />
+                  <Button
+                    containerStyle={{marginLeft: 5, paddingTop: 5, height:30, borderRadius:4, backgroundColor: 'white'}}
+          style={{fontSize: 15, color: 'blue', fontWeight:'normal', width: 70}}
+          styleDisabled={{color: 'red'}}
+          onPress={() => this.onSearch()}>
+          Search
+        </Button>
+              </View>
+
                 {loadingElement}
                 <ScrollView>
                     <View style={styles.girlGrid}>
@@ -104,21 +114,18 @@ class HomePage extends Component {
 }
 
 const styles = StyleSheet.create({
+  girlGrid: {
+      alignSelf: 'stretch',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+      paddingHorizontal: 20
+  },
     girlCell: {
         height: 160,
-        width: 125,
-        paddingBottom: 10,
-        alignItems: 'center'
-    },
-    girlGrid: {
-        alignSelf: 'stretch',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between'
-    },
-    card: {
-        flex: 1,
+        width: 100,
+        alignItems: 'center',
         backgroundColor: 'white',
         shadowOffset: {
             width: 5,
@@ -126,13 +133,15 @@ const styles = StyleSheet.create({
         },
         shadowColor: 'black',
         shadowOpacity: 0.2,
-        width: 105,
-        borderRadius: 10
+        borderRadius: 10,
+        marginBottom: 15
     },
-
+    card: {
+        flex: 1,
+        alignSelf: 'stretch'
+    },
     cardContent: {
         padding: 5
-
     },
     girlName: {
         textAlign: 'center',
@@ -148,10 +157,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#bdc3c7'
     },
     textbox: {
-        height: 40,
-        marginVertical: 10,
-        alignSelf: 'center',
-        width: 300,
+        height: 30,
+        padding: 4,
+        fontSize: 13,
+        flex: 1,
         backgroundColor: 'white'
     },
     welcome: {
