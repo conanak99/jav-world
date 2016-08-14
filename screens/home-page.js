@@ -10,7 +10,6 @@ import {
     View
 } from 'react-native';
 
-import GridView from 'react-native-grid-view';
 import NavigationBar from 'react-native-navbar';
 import Button from 'react-native-button';
 

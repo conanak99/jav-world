@@ -13,7 +13,6 @@ import {
 
 import NavigationBar from 'react-native-navbar';
 
-
 class MovieItem extends Component {
   constructor(props) {
     super(props);
@@ -76,36 +75,36 @@ class MoviePage extends Component {
 
     return <View>
       <NavigationBar
-          title={{ title: girl.name, }}
-          leftButton={leftButtonConfig} />
+        title={{ title: girl.name, }}
+        leftButton={leftButtonConfig} />
 
-        <View style={{flexDirection:'row', padding: 15}}>
-          <Image source={{
-              uri: girl.imageUrl
-          }} style={{width: 120, height:120, borderRadius: 60}}></Image>
+      <View style={{flexDirection:'row', padding: 15}}>
+        <Image source={{
+          uri: girl.imageUrl
+        }} style={{width: 120, height:120, borderRadius: 60}}></Image>
         <View style={{marginLeft: 20}}>
-            <Text style={{fontSize:16, fontWeight:'bold', marginBottom:5}}>{girl.name}</Text>
-              <Text>
-                  B:{girl.bust} W:{girl.waist} H:{girl.hip}
-              </Text>
-              <Text>
-                  Birthday: {girl.birthday}
-              </Text>
-          </View>
-
+          <Text style={{fontSize:16, fontWeight:'bold', marginBottom:5}}>{girl.name}</Text>
+          <Text>
+            B:{girl.bust} W:{girl.waist} H:{girl.hip}
+          </Text>
+          <Text>
+            Birthday: {girl.birthday}
+          </Text>
         </View>
+
+      </View>
+      <View>
         <View>
-          <View>
-            {/* Fix Text View padding bugs */}
-            <Text style={{marginLeft: 20, fontSize:18, fontWeight:'600'}}>Movies</Text>
-          </View>
+          {/* Fix Text View padding bugs */}
+          <Text style={{marginLeft: 20, fontSize:18, fontWeight:'600'}}>Movies</Text>
+        </View>
 
-          <ActivityIndicator size="large" animating={this.state.isLoading}></ActivityIndicator>
-            <ListView style={{height:420, marginTop: -30}}
-
-    dataSource={this.state.movies}
-    renderRow={(rowData) => <MovieItem movie={rowData}/>}
-renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+        <ActivityIndicator size="large" animating={this.state.isLoading}></ActivityIndicator>
+        <ListView style={{height:420, marginTop: -30}}
+          enableEmptySections={true}
+          dataSource={this.state.movies}
+          renderRow={(rowData) => <MovieItem movie={rowData}/>}
+          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
     />
         </View>
 
