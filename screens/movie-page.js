@@ -11,6 +11,9 @@ import {
     View
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Rating from './../components/rating';
+
 import NavigationBar from 'react-native-navbar';
 
 class MovieItem extends Component {
@@ -24,18 +27,27 @@ class MovieItem extends Component {
       return <View></View>;
     }
 
+    var review = <View></View>;
+    if (mv.review) {
+      review = <View>
+        <Rating size={16} score={mv.review.average}
+          count={mv.review.count} color={'#f1c40f'}></Rating>
+      </View>;
+    }
+
     return <View style={{paddingVertical: 10, paddingHorizontal: 15, flexDirection:'row'}}>
-        <Image source={{
-            uri: mv.imageUrl
-        }} style={{height: 200, width:120}}></Image>
+      <Image source={{
+        uri: mv.imageUrl
+      }} style={{height: 200, width:120}}></Image>
       <View style={{paddingLeft:20}}>
         <Text style={{width:200, fontSize:14, fontWeight:'bold', marginBottom:5}}>{mv.name}</Text>
-
         <Text>{mv.maker[0].name}</Text>
-          <Text style={{color: 'blue'}}
-                onPress={() => Linking.openURL(mv.siteUrl)}>
-            Link
-          </Text>
+
+        {review}
+        <Text style={{color: 'blue'}}
+          onPress={() => Linking.openURL(mv.siteUrl)}>
+          Link
+        </Text>
       </View>
     </View>;
   }
